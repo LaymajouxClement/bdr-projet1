@@ -1,5 +1,5 @@
 /*
-    Création des séquences
+    Creation des sequences
 */
 CREATE SEQUENCE ClubSportifSeq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE DirigeantSeq START WITH 1 INCREMENT BY 1;
@@ -12,21 +12,21 @@ CREATE SEQUENCE MatchSeq START WITH 1 INCREMENT BY 1;
 
 
 /*
-    Création des tables
+    Creation des tables
 */
 CREATE TABLE ClubSportif(
     CodeClub NUMBER PRIMARY KEY,
     NomClub VARCHAR(50) NOT NULL,
-    DateCréation DATE NOT NULL, /* TO_DATE('2023-10-25', 'YYYY-MM-DD') */
+    DateCreation DATE NOT NULL, /* TO_DATE('2023-10-25', 'YYYY-MM-DD') */
     Dirigeant INT NOT NULL CHECK(Dirigeant > 0),
     Ville VARCHAR(100) NOT NULL,
-    Région INT NOT NULL CHECK(Région >=1 AND Région <=5)
+    Region INT NOT NULL CHECK(Region >=1 AND Region <=5)
 );
 
 CREATE TABLE Dirigeant(
     Code NUMBER PRIMARY KEY,
     Nom VARCHAR(50) NOT NULL,
-    Prénom VARCHAR(50) NOT NULL,
+    Prenom VARCHAR(50) NOT NULL,
     Profession VARCHAR(100) NOT NULL
 );
 
@@ -42,16 +42,16 @@ CREATE TABLE Stade(
     Code NUMBER PRIMARY KEY,
     Nom VARCHAR(100) NOT NULL,
     Ville VARCHAR(100) NOT NULL,
-    Région INT NOT NULL CHECK(Région >=1 AND Région <=5),
-    Capacité INT NOT NULL CHECK (Capacité > 0)
+    Region INT NOT NULL CHECK(Region >=1 AND Region <=5),
+    Capacite INT NOT NULL CHECK (Capacite > 0)
 );
 
 CREATE TABLE Joueur(
     Code NUMBER PRIMARY KEY,
     Nom VARCHAR(50) NOT NULL,
-    Prénom VARCHAR(50) NOT NULL,
+    Prenom VARCHAR(50) NOT NULL,
     DateDeNaissance DATE NOT NULL, /* TO_DATE('2023-10-25', 'YYYY-MM-DD') */
-    Nationalité VARCHAR(50) NOT NULL,
+    Nationalite VARCHAR(50) NOT NULL,
     Poids FLOAT NOT NULL CHECK(Poids > 0), /* Poids en kg */
     Taille INT NOT NULL CHECK(Taille > 0), /* Taille en cm */
     Classe Varchar(20)
@@ -72,19 +72,19 @@ CREATE TABLE Equipe(
 CREATE TABLE Arbitre(
     Code NUMBER PRIMARY KEY,
     Nom VARCHAR(50) NOT NULL,
-    Prénom VARCHAR(50) NOT NULL,
+    Prenom VARCHAR(50) NOT NULL,
     DateDeNaissance DATE NOT NULL, /* TO_DATE('2023-10-25', 'YYYY-MM-DD') */
-    Région INT NOT NULL CHECK(Région >=1 AND Région <=5),
-    ClubPréféré VARCHAR(50) NOT NULL
+    Region INT NOT NULL CHECK(Region >=1 AND Region <=5),
+    ClubPrefere VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Personnel(
     Code NUMBER PRIMARY KEY,
     Nom VARCHAR(50) NOT NULL,
-    Prénom VARCHAR(50) NOT NULL,
+    Prenom VARCHAR(50) NOT NULL,
     DateDeNaissance DATE NOT NULL, /* TO_DATE('2023-10-25', 'YYYY-MM-DD') */
     Fonction VARCHAR(100) NOT NULL,
-    Région INT NOT NULL CHECK(Région >=1 AND Région <=5),
+    Region INT NOT NULL CHECK(Region >=1 AND Region <=5),
     Ville VARCHAR(100) NOT NULL
 );
 
@@ -101,11 +101,11 @@ CREATE TABLE Match(
 
 CREATE TABLE Palmarès(
     CodeClub INT NOT NULL CHECK(CodeClub > 0),
-    Année DATE NOT NULL, 
-    Trophée VARCHAR(50) NOT NULL,
-    NbreMatchsGagnés INT NOT NULL CHECK(NbreMatchsGagnés >= 0),
+    Annee DATE NOT NULL, 
+    Trophee VARCHAR(50) NOT NULL,
+    NbreMatchsGagnes INT NOT NULL CHECK(NbreMatchsGagnes >= 0),
     NbreMatchsPerdus INT NOT NULL CHECK(NbreMatchsPerdus >= 0),
-    PRIMARY KEY (Année, Trophée),
+    PRIMARY KEY (Annee, Trophee),
     FOREIGN KEY (CodeClub) REFERENCES ClubSportif(CodeClub)
 );
 
@@ -123,34 +123,34 @@ CREATE TABLE Calendrier(
 );
 
 CREATE TABLE Bureau(
-    Région INT NOT NULL PRIMARY KEY CHECK(Région >=1 AND Région <=5),
+    Region INT NOT NULL PRIMARY KEY CHECK(Region >=1 AND Region <=5),
     Nom VARCHAR(50) NOT NULL,
     Adresse VARCHAR(100) NOT NULL,
-    DateCréation DATE NOT NULL /* TO_DATE('2023-10-25', 'YYYY-MM-DD') */
+    DateCreation DATE NOT NULL /* TO_DATE('2023-10-25', 'YYYY-MM-DD') */
 );
 
 
 /*
-    Ajout des clés étrangères
+    Ajout des cles etrangères
 */
 ALTER TABLE ClubSportif
 ADD FOREIGN KEY (Dirigeant) REFERENCES Dirigeant(Code);
 
 ALTER TABLE ClubSportif
-ADD FOREIGN KEY (Région) REFERENCES Bureau(Région);
+ADD FOREIGN KEY (Region) REFERENCES Bureau(Region);
 
 ALTER TABLE Stade
-ADD FOREIGN KEY (Région) REFERENCES Bureau(Région);
+ADD FOREIGN KEY (Region) REFERENCES Bureau(Region);
 
 ALTER TABLE Arbitre
-ADD FOREIGN KEY (Région) REFERENCES Bureau(Région);
+ADD FOREIGN KEY (Region) REFERENCES Bureau(Region);
 
 ALTER TABLE Personnel
-ADD FOREIGN KEY (Région) REFERENCES Bureau(Région);
+ADD FOREIGN KEY (Region) REFERENCES Bureau(Region);
 
 
 /*
-    Création des triggers d'auto-incrémentation
+    Creation des triggers d'auto-incrementation
 */
 CREATE OR REPLACE TRIGGER ClubSportifOnInsert
   BEFORE INSERT ON ClubSportif

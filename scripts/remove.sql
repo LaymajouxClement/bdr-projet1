@@ -1,5 +1,5 @@
 /*
-    Suppression des séquences
+    Suppression des sequences
 */
 DROP SEQUENCE ClubSportifSeq;
 DROP SEQUENCE DirigeantSeq;
@@ -26,7 +26,7 @@ DROP TRIGGER MatchOnInsert;
     Suppression des tables
 */
 DROP TABLE Calendrier;
-DROP TABLE Palmarès;
+DROP TABLE Palmares;
 DROP TABLE Match;
 DROP TABLE Personnel;
 DROP TABLE Stade;
