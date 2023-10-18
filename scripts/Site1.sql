@@ -38,7 +38,7 @@ SELECT * FROM PersonnelSystem WHERE region=1;
 
 CREATE TABLE StaffTechniqueSite1
 AS
-SELECT ST.* FROM STAFFTECHNIQUE ST JOIN CLUBSPORTIF C ON ST.CodeClub=C.CodeClub WHERE C.Region=1; 
+SELECT ST.* FROM STAFFTECHNIQUE ST JOIN ClubSportifSystem C ON ST.CodeClub=C.CodeClub WHERE C.Region=1; 
 
 CREATE TABLE CalendrierSite1
 AS
