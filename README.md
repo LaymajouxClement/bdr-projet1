@@ -57,7 +57,7 @@ Le fichier **/scripts/model.sql** contient toutes les requêtes permettant de cr
 ```Bureau (Région, nom, adresse, DateCréation)```
 
 ### Insertion des données
-Le fichier **/scripts/insert.sql** contient les requêtes d'insertion de données pour toutes les tables afin de pouvoir tester notre base de données.
+Le fichier **/scripts/insert.sql** contient les requêtes d'insertion de données fictives pour toutes les tables afin de pouvoir tester notre base de données.
 
 ### Utilisateurs de bureaux
 Le fichier **/scripts/users.sql** contient les requêtes permettant de créer les utilisateurs de chaque bureau en leur fournissant tous les droits. Les informations de connexion des utilisateurs sont les suivantes (Login / Password):
