@@ -44,13 +44,16 @@ CREATE SYNONYM MatchSite4 FOR MatchSite4@Site1ToSite4;
 CREATE SYNONYM MatchSite5 FOR MatchSite5@Site1ToSite5;
 
 CREATE SYNONYM ClubSportifSite2 FOR ClubSportifSite2@Site1ToSite2;
-
+CREATE SYNONYM StadeSite2 FOR StadeSite2@Site1ToSite2;
 
 CREATE SYNONYM ClubSportifSite3 FOR ClubSportifSite3@Site1ToSite3;
+CREATE SYNONYM StadeSite3 FOR StadeSite3@Site1ToSite3;
 
 CREATE SYNONYM ClubSportifSite4 FOR ClubSportifSite4@Site1ToSite4;
+CREATE SYNONYM StadeSite4 FOR StadeSite4@Site1ToSite4;
 
 CREATE SYNONYM ClubSportifSite5 FOR ClubSportifSite5@Site1ToSite5;
+CREATE SYNONYM StadeSite5 FOR StadeSite5@Site1ToSite5;
 
 /*
     Creation des tables
@@ -116,6 +119,20 @@ UNION ALL
 SELECT * FROM ClubSportifSite4
 UNION ALL
 SELECT * FROM ClubSportifSite5;
+
+DROP MATERIALIZED VIEW AllStadeSite1;
+CREATE MATERIALIZED VIEW AllStadeSite1
+REFRESH ON DEMAND
+AS 
+SELECT * FROM StadeSite1
+UNION ALL
+SELECT * FROM StadeSite2
+UNION ALL
+SELECT * FROM StadeSite3
+UNION ALL
+SELECT * FROM StadeSite4
+UNION ALL
+SELECT * FROM StadeSite5;
 /*
     Creation des triggers de mise a jour
 */
@@ -160,6 +177,7 @@ BEFORE INSERT OR UPDATE OR DELETE
 ON ClubSportifSite1 FOR EACH ROW
 BEGIN
     IF (INSERTING OR UPDATING OR DELETING) THEN
+        DBMS_MVIEW.REFRESH('AllClubSportifSite1', 'F');
         DBMS_MVIEW.REFRESH('AllClubSportifSite2@Site1ToSite2', 'F');
         DBMS_MVIEW.REFRESH('AllClubSportifSite3@Site1ToSite3', 'F');
         DBMS_MVIEW.REFRESH('AllClubSportifSite4@Site1ToSite4', 'F');
