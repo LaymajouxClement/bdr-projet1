@@ -7,6 +7,9 @@ Projet de base de données pour la Fédération Française de football
   - [Création des tables](#création-des-tables)
   - [Insertion des données](#insertion-des-données)
   - [Utilisateurs de bureaux](#utilisateurs-de-bureaux)
+- [SiteN](#siten)
+- [Couche logicielle](#couche-logicielle)
+- [Auteurs](#auteurs)
 
 ## Environnement de travail
 Pour la base de données, nous avons utilisé Oracle 10G Express Edition ainsi que SQL Developper.
