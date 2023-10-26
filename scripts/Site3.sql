@@ -1,3 +1,6 @@
+/*
+    Creation des database link
+*/
 CREATE DATABASE LINK Site3ToSystem
 CONNECT TO system IDENTIFIED BY admin
 USING 'localhost:1521/XE';
@@ -33,6 +36,24 @@ CREATE SYNONYM PalmaresSystem FOR PALMARES@Site3ToSystem;
 CREATE SYNONYM StadeSystem FOR STADE@Site3ToSystem;
 CREATE SYNONYM EquipeSystem FOR EQUIPE@Site3ToSystem;
 CREATE SYNONYM JoueurSystem FOR JOUEUR@Site3ToSystem;
+
+CREATE SYNONYM MatchSite1 FOR MatchSite1@Site3ToSite1;
+CREATE SYNONYM ArbitreSite1 FOR ArbitreSite1@Site3ToSite1;
+CREATE SYNONYM CalendrierSite1 FOR CalendrierSite1@Site3ToSite1;
+CREATE SYNONYM ClubSportifSite1 FOR ClubSportifSite1@Site3ToSite1;
+CREATE SYNONYM AllClubSportifSite1 FOR AllClubSportifSite1@Site3ToSite1;
+
+CREATE SYNONYM ClubSportifSite2 FOR ClubSportifSite2@Site3ToSite2;
+CREATE SYNONYM AllClubSportifSite2 FOR AllClubSportifSite2@Site3ToSite2;
+
+
+CREATE SYNONYM ClubSportifSite4 FOR ClubSportifSite4@Site3ToSite4;
+CREATE SYNONYM AllClubSportifSite4 FOR AllClubSportifSite4@Site3ToSite4;
+
+
+CREATE SYNONYM ClubSportifSite5 FOR ClubSportifSite5@Site3ToSite5;
+CREATE SYNONYM AllClubSportifSite5 FOR AllClubSportifSite5@Site3ToSite5;
+
 
 /*
     Creation des tables
@@ -79,18 +100,60 @@ SELECT e.CodeCLub, e.CodeJoueur, e.DateDebutContrat, e.DateFinContrat, e.NumeroM
 FROM EquipeSystem e, ClubSportifSystem c
 WHERE e.CodeClub=c.CodeCLub AND region=3;
 
-CREATE TABLE CalendrierSite3
+
+/*
+    Creation des vues materialisees
+*/
+DROP MATERIALIZED VIEW AllClubSportifSite3;
+CREATE MATERIALIZED VIEW AllClubSportifSite3
+REFRESH ON DEMAND
+AS 
+SELECT * FROM ClubSportifSite1
+UNION ALL
+SELECT * FROM ClubSportifSite2
+UNION ALL
+SELECT * FROM ClubSportifSite3
+UNION ALL
+SELECT * FROM ClubSportifSite4
+UNION ALL
+SELECT * FROM ClubSportifSite5;
+
+
+DROP MATERIALIZED VIEW CalendrierSite3;
+CREATE MATERIALIZED VIEW CalendrierSite3
+REFRESH ON DEMAND
 AS
 SELECT c.CodeMatch, c.DateMatch, c.Heure, c.ClubA, c.CLubB, c.Stade
-FROM CalendrierSystem c, ClubSportifSystem c1, ClubSportifSystem c2
+FROM CalendrierSite1 c, ClubSportifSystem c1, ClubSportifSystem c2
 WHERE c.ClubA=c1.CodeClub AND c.ClubB=c2.CodeCLub AND (c1.region=3 OR c2.region=3);
 
-CREATE TABLE MatchSite3
+DROP MATERIALIZED VIEW MatchSite3;
+CREATE MATERIALIZED VIEW MatchSite3
+REFRESH ON DEMAND
 AS
 SELECT m.CodeMatch, m.NbreButsClubA, m.NbreButsClubB, m.NbreSpectateurs, m.CodeArbitre, m.CodeStade
 FROM MatchSystem m, StadeSystem s
 WHERE m.CodeStade=s.Code AND s.region=3;
 
+DROP MATERIALIZED VIEW ArbitreSite3;
+CREATE MATERIALIZED VIEW ArbitreSite3
+REFRESH
+NEXT TRUNC(NEXT_DAY(SYSDATE, 3) + INTERVAL '15:00' HOUR TO MINUTE)
+AS 
+SELECT * FROM ArbitreSite1 a
+WHERE a.Code IN (SELECT m.CodeArbitre FROM MatchSite3 m, StadeSite3 s WHERE m.CodeStade=s.Code);
 
-SELECT * FROM matchSite3 m, stadeSite3 s WHERE m.codestade=s.code;
-
+/*
+    Creation des triggers
+*/
+CREATE OR REPLACE TRIGGER majClubSportifSite3
+BEFORE INSERT OR UPDATE OR DELETE
+ON ClubSportifSite3 FOR EACH ROW
+BEGIN
+    IF (INSERTING OR UPDATING OR DELETING) THEN
+        DBMS_MVIEW.REFRESH('AllClubSportifSite1@Site3ToSite1', 'F');
+        DBMS_MVIEW.REFRESH('AllClubSportifSite2@Site3ToSite2', 'F');
+        DBMS_MVIEW.REFRESH('AllClubSportifSite4@Site3ToSite4', 'F');
+        DBMS_MVIEW.REFRESH('AllClubSportifSite5@Site3ToSite5', 'F');
+    END IF;
+END;
