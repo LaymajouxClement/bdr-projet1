@@ -124,9 +124,6 @@ SELECT * FROM ClubSportifSite4
 UNION ALL
 SELECT * FROM ClubSportifSite5;
 
-select * from clubsportifsite1;
-INSERT INTO ClubSportifSite1(CodeClub, NomClub, DateCreation, Dirigeant, Ville, Region) VALUES(23, 'Le Mans FC', TO_DATE('1970-08-17', 'YYYY-MM-DD'), 1, 'Le Mans', 2);*
-
 DROP MATERIALIZED VIEW AllStadeSite1;
 CREATE MATERIALIZED VIEW AllStadeSite1
 REFRESH ON DEMAND
@@ -140,16 +137,48 @@ UNION ALL
 SELECT * FROM StadeSite4
 UNION ALL
 SELECT * FROM StadeSite5;
+
 /*
     Creation des procedures et jobs de mise a jour
 */
+CREATE OR REPLACE PROCEDURE RefreshAllClubSite1
+IS
+BEGIN
+    DBMS_MVIEW.REFRESH('AllClubSportifSite1', '?');
+END;
+/
+
+CREATE OR REPLACE PROCEDURE majClubSportifSite1
+IS
+BEGIN
+    RefreshAllClubSite1;
+    RefreshAllClubSite2@Site1ToSite2;
+    RefreshAllClubSite3@Site1ToSite3;
+    RefreshAllClubSite4@Site1ToSite4;
+    RefreshAllClubSite5@Site1ToSite5;
+END;
+/
+BEGIN
+    DBMS_SCHEDULER.CREATE_JOB (
+        job_name        => 'ActualiserClubSportifSite1',
+        job_type        => 'PLSQL_BLOCK',
+        job_action      => 'BEGIN majClubSportifSite1; END;',
+        start_date      => SYSTIMESTAMP,
+        repeat_interval => 'FREQ=DAILY; INTERVAL=1',
+        enabled         => TRUE);
+END;
+/
+INSERT INTO ClubSportifSite1(CodeClub, NomClub, DateCreation, Dirigeant, Ville, Region) VALUES(25, 'Le Mans FC', TO_DATE('1970-08-17', 'YYYY-MM-DD'), 1, 'Le Mans', 2);
+select * from clubsportifsite1;
+/
+
 CREATE OR REPLACE PROCEDURE majMatchSite1
 IS
 BEGIN
-    DBMS_MVIEW.REFRESH('MatchSite2@Site1ToSite2', 'F');
-    DBMS_MVIEW.REFRESH('MatchSite3@Site1ToSite3', 'F');
-    DBMS_MVIEW.REFRESH('MatchSite4@Site1ToSite4', 'F');
-    DBMS_MVIEW.REFRESH('MatchSite5@Site1ToSite5', 'F');
+    RefreshMatchSite2@Site1ToSite2;
+    RefreshMatchSite3@Site1ToSite3;
+    RefreshMatchSite4@Site1ToSite4;
+    RefreshMatchSite5@Site1ToSite5;
 END;
 /
 BEGIN
@@ -167,10 +196,10 @@ END;
 CREATE OR REPLACE PROCEDURE majCalendrierSite1
 IS
 BEGIN
-    DBMS_MVIEW.REFRESH('CalendrierSite2@Site1ToSite2', 'F');
-    DBMS_MVIEW.REFRESH('CalendrierSite3@Site1ToSite3', 'F');
-    DBMS_MVIEW.REFRESH('CalendrierSite4@Site1ToSite4', 'F');
-    DBMS_MVIEW.REFRESH('CalendrierSite5@Site1ToSite5', 'F');
+    RefreshCalendrierSite2@Site1ToSite2;
+    RefreshCalendrierSite3@Site1ToSite3;
+    RefreshCalendrierSite4@Site1ToSite4;
+    RefreshCalendrierSite5@Site1ToSite5;
 END;
 /
 BEGIN
@@ -188,10 +217,10 @@ END;
 CREATE OR REPLACE PROCEDURE majArbitreSite1
 IS
 BEGIN
-    DBMS_MVIEW.REFRESH('ArbitreSite2@Site1ToSite2', 'F');
-    DBMS_MVIEW.REFRESH('ArbitreSite3@Site1ToSite3', 'F');
-    DBMS_MVIEW.REFRESH('ArbitreSite4@Site1ToSite4', 'F');
-    DBMS_MVIEW.REFRESH('ArbitreSite5@Site1ToSite5', 'F');
+    RefreshArbitreSite2@Site1ToSite2;
+    RefreshArbitreSite3@Site1ToSite3;
+    RefreshArbitreSite4@Site1ToSite4;
+    RefreshArbitreSite5@Site1ToSite5;
 END;
 /
 BEGIN
@@ -199,28 +228,6 @@ BEGIN
         job_name        => 'ActualiserArbitreSite1',
         job_type        => 'PLSQL_BLOCK',
         job_action      => 'BEGIN majArbitreSite1; END;',
-        start_date      => SYSTIMESTAMP,
-        repeat_interval => 'FREQ=DAILY; INTERVAL=1',
-        enabled         => TRUE);
-END;
-/
-
-
-CREATE OR REPLACE PROCEDURE majClubSportifSite1
-IS
-BEGIN
-    DBMS_MVIEW.REFRESH('AllClubSportifSite1', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite2', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite3', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite4', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite5', 'F');
-END;
-/
-BEGIN
-    DBMS_SCHEDULER.CREATE_JOB (
-        job_name        => 'ActualiserClubSportifSite1',
-        job_type        => 'PLSQL_BLOCK',
-        job_action      => 'BEGIN majClubSportifSite1; END;',
         start_date      => SYSTIMESTAMP,
         repeat_interval => 'FREQ=DAILY; INTERVAL=1',
         enabled         => TRUE);

@@ -144,15 +144,20 @@ WHERE a.Code IN (SELECT m.CodeArbitre FROM MatchSite2 m, StadeSite2 s WHERE m.Co
 /*
     Creation des procedure/jobs
 */
-
+CREATE OR REPLACE PROCEDURE RefreshAllClubSite2
+IS
+BEGIN
+    DBMS_MVIEW.REFRESH('AllClubSportifSite2', '?');
+END;
+/
 CREATE OR REPLACE PROCEDURE majClubSportifSite2
 IS
 BEGIN
-    DBMS_MVIEW.REFRESH('AllClubSportifSite2', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite1', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite3', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite4', 'F');
-    DBMS_MVIEW.REFRESH('AllClubSportifSite5', 'F');
+    RefreshAllClubSite1@Site2ToSite1;
+    RefreshAllClubSite2;
+    RefreshAllClubSite3@Site2ToSite3;
+    RefreshAllClubSite4@Site2ToSite4;
+    RefreshAllClubSite5@Site2ToSite5;
 END;
 /
 BEGIN
@@ -165,3 +170,26 @@ BEGIN
         enabled         => TRUE);
 END;
 /
+
+
+CREATE OR REPLACE PROCEDURE RefreshMatchSite2
+IS
+BEGIN
+    DBMS_MVIEW.REFRESH('MatchSite2', '?');
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE RefreshCalendrierSite2
+IS
+BEGIN
+    DBMS_MVIEW.REFRESH('CalendrierSite2', '?');
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE RefreshArbitreSite2
+IS
+BEGIN
+    DBMS_MVIEW.REFRESH('ArbitreSite2', '?');
+END;
