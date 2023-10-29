@@ -68,7 +68,7 @@ Le fichier **/scripts/users.sql** contient les requêtes permettant de créer le
 - Site5 / Site5
 
 ## SiteN
-Les différents fichier **/scripts/SiteN.sql** contient les requêtes à exécuter par le SiteN (Site1.sql doit être exécuté par Site1). Les fichiers contiennent les **database link**, **fragments de table**, **vues matérialisées** et **trggers** spécifiques à chaque site en fonction des besoins.
+Les différents fichier **/scripts/SiteN.sql** contient les requêtes à exécuter par le SiteN (Site1.sql doit être exécuté par Site1). Les fichiers contiennent les **database link**, **fragments de table**, **vues matérialisées**, **procédures** et **jobs** spécifiques à chaque site en fonction des besoins.
 
 ## Couche logicielle
 Pour la couche logicielle, nous avons créé un autre Github disponible grâce au [lien suivant](https://github.com/LaymajouxClement/bdr-projet1-app).
