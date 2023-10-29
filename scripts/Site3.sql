@@ -144,16 +144,25 @@ SELECT * FROM ArbitreSite1 a
 WHERE a.Code IN (SELECT m.CodeArbitre FROM MatchSite3 m, StadeSite3 s WHERE m.CodeStade=s.Code);
 
 /*
-    Creation des triggers
+    Creation des procedure/jobs
 */
-CREATE OR REPLACE TRIGGER majClubSportifSite3
-BEFORE INSERT OR UPDATE OR DELETE
-ON ClubSportifSite3 FOR EACH ROW
+CREATE OR REPLACE PROCEDURE majClubSportifSite3
+IS
 BEGIN
-    IF (INSERTING OR UPDATING OR DELETING) THEN
-        DBMS_MVIEW.REFRESH('AllClubSportifSite1@Site3ToSite1', 'F');
-        DBMS_MVIEW.REFRESH('AllClubSportifSite2@Site3ToSite2', 'F');
-        DBMS_MVIEW.REFRESH('AllClubSportifSite4@Site3ToSite4', 'F');
-        DBMS_MVIEW.REFRESH('AllClubSportifSite5@Site3ToSite5', 'F');
-    END IF;
+    DBMS_MVIEW.REFRESH('AllClubSportifSite2', 'F');
+    DBMS_MVIEW.REFRESH('AllClubSportifSite1', 'F');
+    DBMS_MVIEW.REFRESH('AllClubSportifSite3', 'F');
+    DBMS_MVIEW.REFRESH('AllClubSportifSite4', 'F');
+    DBMS_MVIEW.REFRESH('AllClubSportifSite5', 'F');
 END;
+/
+BEGIN
+    DBMS_SCHEDULER.CREATE_JOB (
+        job_name        => 'ActualiserClubSportifSite3',
+        job_type        => 'PLSQL_BLOCK',
+        job_action      => 'BEGIN majClubSportifSite3; END;',
+        start_date      => SYSTIMESTAMP,
+        repeat_interval => 'FREQ=DAILY; INTERVAL=1',
+        enabled         => TRUE);
+END;
+/
