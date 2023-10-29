@@ -32,9 +32,9 @@ INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Schaefer', 'Ahmet', 'Dire
 INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('CaÃ¯azzo', 'Bernard', 'SpÃ©cialiste des centres d''appel');
 INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Romeyer', 'Roland', 'PrÃ©sident-fondateur d''une sociÃ©tÃ© d''agencement');
 INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Rybolovlev', 'Dmitri', 'Milliardaire russe rÃ©sidant Ã  Monaco');
-INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Chabane', 'SaÃ¯d', 'Fondateur de la sociÃ©tÃ© Cosnelle, spÃ©cialisÃ©e dans le nÃ©goce de la charcuterie');
+INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Chabane', 'SaÃ¯d', 'Fondateur de la sociÃ©tÃ© Cosnelle, spÃ©cialisÃ©e dans la charcuterie');
 INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Zhou', 'James', 'Fondateur d''ORG Technology, entreprise d''emballage');
-INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Orsoni', 'Alain', 'Elu indÃ©pendantiste Ã  l''assemblÃ©e de Corse, prÃ©sident de la holding propriÃ©taire');
+INSERT INTO Dirigeant(Nom, Prenom, Profession) VALUES('Orsoni', 'Alain', 'Elu Ã l''assemblÃ©e de Corse, prÃ©sident de la holding propriÃ©taire');
 
 
 /*
